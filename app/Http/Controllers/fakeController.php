@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class fakeController extends Controller
 {
@@ -13,7 +15,10 @@ class fakeController extends Controller
      */
     public function index()
     {
-        return "fake1 index";
+        $role = Role::create(['name' => 'supraadmino']);
+       
+        $role->syncPermissions(7,8,9);
+        return "super admin created";
     }
 
     /**
