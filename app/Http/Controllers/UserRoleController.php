@@ -3,28 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use Session;
+use App\User;
+use Auth;
 
-class fake2Controller extends Controller
+
+class UserRoleController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-
-
-     public function __construct()
-      {
-          $this->middleware('auth');
-          $this->middleware('permission:read');
-          $this->middleware('permission:create', ['only' => ['create','store']]);
-          $this->middleware('permission:update', ['only' => ['edit','update']]);
-          $this->middleware('permission:delete', ['only' => ['destroy']]);
-      }
-
     public function index()
     {
-        return "fake2 index";
+        $user = User::all();
+        $role = Role::all();
+        return view('userrole')->with('users',$user)
+                               ->with('roles',$role);
     }
 
     /**
@@ -34,7 +32,8 @@ class fake2Controller extends Controller
      */
     public function create()
     {
-        return "fake2 create";
+          $user =    Auth::user();
+          return    $user->getPermissionsViaRoles()[0]->name;
     }
 
     /**
@@ -45,7 +44,10 @@ class fake2Controller extends Controller
      */
     public function store(Request $request)
     {
-        return "fake2 store";
+      $user = User::find($request->user);
+      $user->assignRole($request->role);
+      Session::flash('message', 'Role assigned to the user successfully');
+      return redirect()->route('user.index');
     }
 
     /**
@@ -56,7 +58,7 @@ class fake2Controller extends Controller
      */
     public function show($id)
     {
-        return "fake2 show";
+        //
     }
 
     /**
@@ -67,7 +69,7 @@ class fake2Controller extends Controller
      */
     public function edit($id)
     {
-        return "fake2 edit";
+        //
     }
 
     /**
@@ -79,7 +81,7 @@ class fake2Controller extends Controller
      */
     public function update(Request $request, $id)
     {
-        return "fake2 update";
+        //
     }
 
     /**
@@ -90,6 +92,6 @@ class fake2Controller extends Controller
      */
     public function destroy($id)
     {
-        return "fake2 destroy";
+        //
     }
 }

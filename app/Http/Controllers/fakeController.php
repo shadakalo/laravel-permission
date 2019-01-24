@@ -8,15 +8,13 @@ use Spatie\Permission\Models\Permission;
 
 class fakeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+
+  
     public function index()
     {
         $role = Role::create(['name' => 'supraadmino']);
-       
+
         $role->syncPermissions(7,8,9);
         return "super admin created";
     }
